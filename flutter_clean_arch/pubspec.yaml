@@ -11,6 +11,7 @@ environment:
 dependencies:
   # Remote API
   connectivity: ^3.0.6
+  http: ^0.13.4
   cupertino_icons: ^1.0.2
   # Functional programming thingies
   dartz: ^0.10.1
@@ -22,7 +23,6 @@ dependencies:
   flutter_bloc: ^8.0.1
   # Service locator
   get_it: ^7.2.0
-  http: ^0.13.4
   # Local cache
   shared_preferences: ^2.0.13
 
