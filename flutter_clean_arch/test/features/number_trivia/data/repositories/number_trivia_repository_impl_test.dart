@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_clean_arch/core/error/exceptions.dart';
 import 'package:flutter_clean_arch/core/error/failures.dart';
-import 'package:flutter_clean_arch/core/platform/network_info.dart';
+import 'package:flutter_clean_arch/core/network/network_info.dart';
 import 'package:flutter_clean_arch/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
 import 'package:flutter_clean_arch/features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
 import 'package:flutter_clean_arch/features/number_trivia/data/models/number_trivia_model.dart';
@@ -29,8 +29,8 @@ void main() {
     mockLocalDataSource = MockLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();
     repository = NumberTriviaRepositoryImpl(
-      localDataSource: mockLocalDataSource,
       remoteDataSource: mockRemoteDataSource,
+      localDataSource: mockLocalDataSource,
       networkInfo: mockNetworkInfo,
     );
   });
@@ -55,7 +55,7 @@ void main() {
     });
   }
 
-  group('getConcreteNumberTrivia', () {
+  group('getCOncreteNumberTrivia', () {
     const tNumber = 1;
     const tNUmberTriviaModel =
         NumberTriviaModel(text: 'test trivia', number: tNumber);
