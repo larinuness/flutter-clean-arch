@@ -9,9 +9,9 @@ void main() {
     inputConverter = InputConverter();
   });
 
-  group('stringToUnsigend', () {
+  group('stringToUnsigned', () {
     test(
-        'should return an integer when the stream represents an unsigend integer',
+        'should return an integer when the stream represents an unsigned integer',
         () async {
       //arrange
       const str = "123";
