@@ -40,9 +40,15 @@ void main() {
     const tNumberParsed = 1;
     const tNumberTrivia = NumberTrivia(text: 'test trivia', number: 1);
 
+    test(
+        'should call the InputConverter to validade and convert the string to an unsigned integer',
+        () {
+      when(() => mockInputConverter.stringToUnsigendInteger(any()))
+          .thenReturn(const Right(tNumberParsed));
 
-    test('should call the InputConverter to validade and convert the string to an unsigned integer', () {
-      
+      bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString));
+
+      verify(() => mockInputConverter.stringToUnsigendInteger(tNumberString));
     });
   });
 }
