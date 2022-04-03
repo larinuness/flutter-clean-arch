@@ -41,12 +41,17 @@ void main() {
     const tNumberTrivia = NumberTrivia(text: 'test trivia', number: 1);
 
     test(
-        'should call the InputConverter to validade and convert the string to an unsigned integer',
-        () {
+        'should call the input converter to validate and convert the string to an unsigned integer',
+        () async {
       when(() => mockInputConverter.stringToUnsigendInteger(any()))
           .thenReturn(const Right(tNumberParsed));
+      when(() =>
+              mockGetConcreteNumberTrivia(const Params(number: tNumberParsed)))
+          .thenAnswer((invocation) async => const Right(tNumberTrivia));
 
       bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString));
+      await untilCalled(
+          () => mockInputConverter.stringToUnsigendInteger(any()));
 
       verify(() => mockInputConverter.stringToUnsigendInteger(tNumberString));
     });
