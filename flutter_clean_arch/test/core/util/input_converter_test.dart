@@ -16,7 +16,7 @@ void main() {
       //arrange
       const str = "123";
       //act
-      final result = inputConverter.stringToUnsigendInteger(str);
+      final result = inputConverter.stringToUnsignedInteger(str);
       //assert
       expect(result, const Right(123));
     });
@@ -26,7 +26,7 @@ void main() {
       const str = "abc";
 
       //act
-      final result = inputConverter.stringToUnsigendInteger(str);
+      final result = inputConverter.stringToUnsignedInteger(str);
       //assert
       expect(result, Left(InvalidInputFailure()));
     });
@@ -37,7 +37,7 @@ void main() {
       const str = "-123";
 
       //act
-      final result = inputConverter.stringToUnsigendInteger(str);
+      final result = inputConverter.stringToUnsignedInteger(str);
       //assert
       expect(result, Left(InvalidInputFailure()));
     });

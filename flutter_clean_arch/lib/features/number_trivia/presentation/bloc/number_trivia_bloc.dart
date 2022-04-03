@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/error/failures.dart';
+import '../../../../core/usecases/usecases.dart';
 import '../../../../core/util/input_converter.dart';
 import '../../domain/entities/number_trivia.dart';
 import '../../domain/usecases/get_concrete_number_trivia.dart';
@@ -21,13 +23,57 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
   final GetConcreteNumberTrivia getConcreteNumberTrivia;
   final GetRandomNumberTrivia getRandomNumberTrivia;
   final InputConverter inputConverter;
-
   NumberTriviaBloc({
     required GetConcreteNumberTrivia concrete,
     required GetRandomNumberTrivia random,
     required this.inputConverter,
   })  : getConcreteNumberTrivia = concrete,
         getRandomNumberTrivia = random,
-        // ignore: empty_constructor_bodies
-        super(Empty()) {}
+        super(Empty()) {
+    on<GetTriviaForConcreteNumber>((event, emit) async {
+      return await onEventGetTriviaForConcreteNumber(event, emit);
+    });
+
+    on<GetTriviaForRandomNumber>((event, emit) async {
+      await onEventGetTriviaForRandomNumber(emit);
+    });
+  }
+
+  Future<void> onEventGetTriviaForRandomNumber(
+      Emitter<NumberTriviaState> emit) async {
+    emit(Loading());
+    final failureOrTrivia = await getRandomNumberTrivia(NoParam());
+    failureOrTrivia.fold(
+      (failure) => emit(Error(message: _mapFailureToMessage(failure))),
+      (trivia) => emit(Loaded(trivia: trivia)),
+    );
+  }
+
+  onEventGetTriviaForConcreteNumber(
+      GetTriviaForConcreteNumber event, Emitter<NumberTriviaState> emit) async {
+    final inputEither =
+        inputConverter.stringToUnsignedInteger(event.numberString);
+    return inputEither.fold((failure) {
+      return emit(const Error(message: INVALID_INPUT_FAILURE_MESSAGE));
+    }, (integer) async {
+      emit(Loading());
+      final failureOrTrivia =
+          await getConcreteNumberTrivia(Params(number: integer));
+      failureOrTrivia.fold(
+        (failure) => emit(Error(message: _mapFailureToMessage(failure))),
+        (trivia) => emit(Loaded(trivia: trivia)),
+      );
+    });
+  }
+
+  String _mapFailureToMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        return SERVER_FAILURE_MESSAGE;
+      case CacheFailure:
+        return CACHE_FAILURE_MESSAGE;
+      default:
+        return 'Unexpected error';
+    }
+  }
 }
