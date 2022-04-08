@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+
 import '../../../../core/error/exceptions.dart';
 import '../models/number_trivia_model.dart';
-import 'package:http/http.dart' as http;
 
 abstract class NumberTriviaRemoteDataSource {
   /*Gets the cached NumberTriviaModel which was gotten the last time
